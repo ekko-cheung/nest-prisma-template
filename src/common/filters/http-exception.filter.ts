@@ -5,7 +5,7 @@ import {
   HttpException,
 } from '@nestjs/common';
 import type { Response } from 'express';
-import { createRespBody, ErrorCode } from '../resp-body';
+import { createErrorResp, ErrorCode } from '../resp-body';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -23,9 +23,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
     ) {
       errorCode = (exceptionResp as any).error;
     }
-    const resp = createRespBody(null, [
-      { message: exception.message, code: errorCode as ErrorCode },
-    ]);
-    response.status(status).json(resp);
+
+    response
+      .status(status)
+      .json(createErrorResp(exception.message, errorCode as ErrorCode));
   }
 }

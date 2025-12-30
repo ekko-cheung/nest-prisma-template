@@ -3,30 +3,36 @@ export enum ErrorCode {
 }
 
 type RespError = {
-  code: ErrorCode;
-  message: string;
+  cause: string;
+  field: string;
 };
 
 type RespBody<T> = {
+  success: boolean;
+  code: ErrorCode | '0';
   data?: T;
   errors?: RespError[];
-  total?: number;
+  message: string;
 };
 
-export const createRespBody = <T>(
-  data?: T,
+export const createSuccessResp = <T>(data: T): RespBody<T> => {
+  return {
+    success: true,
+    code: '0',
+    data,
+    message: 'success',
+  };
+};
+
+export const createErrorResp = (
+  message: string,
+  code: ErrorCode,
   errors?: RespError[],
-  total?: number,
-): RespBody<T> => {
-  const respBody: RespBody<T> = {};
-  if (data !== undefined) {
-    respBody.data = data;
-  }
-  if (errors !== undefined) {
-    respBody.errors = errors;
-  }
-  if (total !== undefined) {
-    respBody.total = total;
-  }
-  return respBody;
+): RespBody<null> => {
+  return {
+    success: false,
+    code,
+    message,
+    errors,
+  };
 };
