@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { ZodError } from 'zod';
-import { createErrorResp, ErrorCode } from '../resp-body';
+import { createErrorResp, ErrorCode } from '../resp-body.js';
 
 @Catch(ZodError)
 export class ZodErrorFilter implements ExceptionFilter<ZodError> {
